@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_03_165843) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_03_181913) do
   create_table "active_admin_comments", charset: "utf8mb4", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -37,4 +37,51 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_03_165843) do
     t.index ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true
   end
 
+  create_table "customers", charset: "utf8mb4", force: :cascade do |t|
+    t.string "ip"
+    t.integer "votes_count", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "polls", charset: "utf8mb4", force: :cascade do |t|
+    t.string "title"
+    t.integer "questions_limit"
+    t.integer "state", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["state"], name: "index_polls_on_state"
+  end
+
+  create_table "polls_questions", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "poll_id"
+    t.bigint "question_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["poll_id"], name: "index_polls_questions_on_poll_id"
+    t.index ["question_id"], name: "index_polls_questions_on_question_id"
+  end
+
+  create_table "questions", charset: "utf8mb4", force: :cascade do |t|
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "votes", charset: "utf8mb4", force: :cascade do |t|
+    t.bigint "customer_id"
+    t.bigint "poll_id"
+    t.bigint "question_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id", "poll_id"], name: "index_votes_on_customer_id_and_poll_id", unique: true
+    t.index ["customer_id"], name: "index_votes_on_customer_id"
+    t.index ["poll_id", "question_id"], name: "index_votes_on_poll_id_and_question_id", unique: true
+    t.index ["poll_id"], name: "index_votes_on_poll_id"
+    t.index ["question_id"], name: "index_votes_on_question_id"
+  end
+
+  add_foreign_key "votes", "customers"
+  add_foreign_key "votes", "polls"
+  add_foreign_key "votes", "questions"
 end
