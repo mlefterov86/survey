@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_03_181913) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_05_121032) do
   create_table "active_admin_comments", charset: "utf8mb4", force: :cascade do |t|
     t.string "namespace"
     t.text "body"
@@ -76,7 +76,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_03_181913) do
     t.datetime "updated_at", null: false
     t.index ["customer_id", "poll_id"], name: "index_votes_on_customer_id_and_poll_id", unique: true
     t.index ["customer_id"], name: "index_votes_on_customer_id"
-    t.index ["poll_id", "question_id"], name: "index_votes_on_poll_id_and_question_id", unique: true
     t.index ["poll_id"], name: "index_votes_on_poll_id"
     t.index ["question_id"], name: "index_votes_on_question_id"
   end
