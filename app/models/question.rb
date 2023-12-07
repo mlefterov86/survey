@@ -10,7 +10,6 @@ class Question < ApplicationRecord
   before_destroy { polls.clear }
 
   validates :content, presence: true
-  validate :editable
 
   def self.ransackable_attributes(_auth_object = nil)
     %w[content created_at updated_at]
@@ -18,11 +17,5 @@ class Question < ApplicationRecord
 
   def self.ransackable_associations(_auth_object = nil)
     %w[customers polls votes]
-  end
-
-  private
-
-  def editable
-    errors.add(:base, 'Unable to edit. Question already assigned to a poll.') if polls.any?
   end
 end

@@ -1,0 +1,14 @@
+<div class="row">
+  <% @questions.each do |question|  %>
+    <div class="col-6">
+      <% percentage = (question.question_votes.to_f / @poll.votes_count.to_f) * 100 %>
+      <span>
+        <%= question.content %>
+      </span>
+        <span class="text-danger">(<%= percentage.round(2) %>%)</span>
+      <div class="progress" role="progressbar" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar bg-success" style="width: <%= percentage %>%"></div>
+      </div>
+    </div>
+  <% end %>
+</div>

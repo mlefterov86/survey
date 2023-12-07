@@ -8,6 +8,24 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <style>
+      .poll {
+        .header {
+          color: #fff;
+          background: #333333;
+          padding: 20px;
+
+          .left {
+            float: left;
+            width: 60%;
+          }
+
+          .right { float: right; }
+        }
+
+        .total_votes { padding: 10px; }
+      }
+    </style>
   </head>
 
   <body>

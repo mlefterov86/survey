@@ -10,6 +10,9 @@ Rails.application.routes.draw do
 
   root to: "admin/dashboard#index"
 
-  get '/polls/:id', to: 'polls#show'
-  post '/polls/:id/submit', to: 'polls#submit'
+  resources :polls do
+    member do
+      patch :vote
+    end
+  end
 end

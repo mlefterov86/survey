@@ -1,0 +1,24 @@
+<div class="container text-center poll">
+  <div class="row">
+    <div class="col header">
+      <div class="left text-start">
+        <h4>Survey ></h4>
+        <p><%= @poll.title %></p>
+      </div>
+      <div class="right text-end">
+        <p>< Votes</p>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col text-dark text-end total_votes">
+      <%= "Results out of #{@poll.votes_count} votes" %>
+    </div>
+  </div>
+
+  <% if @customer.present? && @customer.already_voted_for?(@poll) %>
+    <%= render 'results' %>
+  <% else %>
+    <%= render 'survey' %>
+  <% end %>
+</div>

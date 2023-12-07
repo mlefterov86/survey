@@ -35,40 +35,38 @@ RSpec.describe Poll, type: :model do
           end
         end
 
-        it 'is invalid when state is published' do
-          poll.published!
-          poll.title = 'New title'
-          expect(poll).to be_invalid
-          expect(poll.errors[:base]).to include('Unable to edit a `published` poll')
+        context 'when poll is published' do
+          let(:poll) { FactoryBot.create(:poll, :with_questions) }
+
+          before { poll.published! }
+
+          it 'is invalid when state is published' do
+            poll.title = 'New title'
+            expect(poll).to be_invalid
+            expect(poll.errors[:base]).to include('Unable to edit a `published` poll')
+          end
         end
       end
-    end
-  end
 
-  describe 'custom methods' do
-    let(:question1) { FactoryBot.create(:question) }
-    let(:question2) { FactoryBot.create(:question) }
+      describe '#publish_new_record' do
+        let(:poll) { FactoryBot.build(:poll, :published) }
 
-    before do
-      poll.questions << [question1, question2]
-      poll.save!
-    end
-
-    describe '#total_questions' do
-      it 'returns the count of associated questions' do
-        expect(poll.total_questions).to eq(2)
-      end
-    end
-
-    describe '#total_votes' do
-      let(:customer) { FactoryBot.create(:customer) }
-
-      before do
-        FactoryBot.create(:vote, poll:, customer:, question: question1)
+        it 'expected to be invalid' do
+          expect(poll).to be_invalid
+          expect(poll.errors[:base]).to include('Publishing a new poll not allowed')
+        end
       end
 
-      it 'returns the count of associated votes' do
-        expect(poll.total_votes).to eq(1)
+      describe '#can_publish' do
+        before do
+          poll.questions << FactoryBot.create(:question)
+          poll.state = 10
+        end
+
+        it 'expected to be invalid' do
+          expect(poll).to be_invalid
+          expect(poll.errors[:base]).to include('Publishing a poll requires more than one question')
+        end
       end
     end
   end
@@ -82,9 +80,37 @@ RSpec.describe Poll, type: :model do
     end
   end
 
+  describe 'scopes' do
+    let(:poll) { FactoryBot.create(:poll, :with_questions) }
+
+    before do
+      2.times do
+        FactoryBot.create(:vote, poll:, question: poll.questions[rand(2)])
+      end
+    end
+
+    describe '.find_by_id' do
+      subject(:poll_by_id) { Poll.find_by_id(poll.id).first }
+
+      it 'returns a poll with votes count for a given id' do
+        expect(poll_by_id.votes_count).to eq 2
+      end
+    end
+
+    describe '.questions_for' do
+      subject(:poll_questions) { Poll.questions_for(poll) }
+
+      it "returns a poll with questions, including question's votes for a given `Poll`" do
+        poll_questions.each do |question|
+          expect(question.question_votes).to eq Vote.where(question:).count
+        end
+      end
+    end
+  end
+
   describe 'ransackable_attributes' do
     it 'returns an array of ransackable attributes' do
-      expect(described_class.ransackable_attributes).to match_array(%w[title created_at updated_at])
+      expect(described_class.ransackable_attributes).to match_array(%w[title state created_at updated_at])
     end
   end
 

@@ -32,4 +32,17 @@ ActiveAdmin.register Question do
       end
     end
   end
+
+  controller do
+    before_action :check_edit_permission, only: %i[edit update]
+
+    private
+
+    def check_edit_permission
+      return unless resource.polls.any?
+
+      flash[:error] = 'Editing is not allowed questions associated with polls'
+      redirect_to admin_questions_path
+    end
+  end
 end
