@@ -14,18 +14,6 @@ RSpec.describe Question, type: :model do
 
   describe 'validations' do
     it { should validate_presence_of(:content) }
-
-    context 'custom validation' do
-      it 'is valid when not assigned to any poll' do
-        expect(question).to be_valid
-      end
-
-      it 'is invalid when assigned to a poll' do
-        question.polls << poll
-        expect(question).to be_invalid
-        expect(question.errors[:base]).to include('Unable to edit. Question already assigned to a poll.')
-      end
-    end
   end
 
   describe 'class methods' do

@@ -1,0 +1,15 @@
+<div class="row">
+  <%= form_with(model: @poll, url: { action: :vote }) do |f| %>
+    <ul class="list-group list-group-flush">
+      <% @questions.each do |question| %>
+        <li class="list-group-item">
+          <%= radio_button_tag(:question_id, question.id, class: "color_input") %>
+          <%= label_tag(:questions, question.content) %>
+        </li>
+      <% end %>
+    <div class="actions">
+      <%= f.submit("Submit", class: "button primary small radius") %>
+    </div>
+    </ul>
+  <% end %>
+</div>

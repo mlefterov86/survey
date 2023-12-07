@@ -46,7 +46,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_05_121032) do
 
   create_table "polls", charset: "utf8mb4", force: :cascade do |t|
     t.string "title"
-    t.integer "questions_limit"
     t.integer "state", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
