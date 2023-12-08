@@ -17,9 +17,6 @@ Ruby on rails app for the a simple survey with votes.
 * navigate to the created directory
 * install ruby 3.2.2
 * install bundles -> `bundle intall`
-* install turbo-rails and stimulus packages
-  * `yarn add @hotwired/turbo-rails`
-  * `yarn add @hotwired/stimulus`
 * adapt `database.yml` and provide your localhost credentials
 * create DB and seeds
   * `rails db:create` -> create DB `poll_development`
